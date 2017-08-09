@@ -8,7 +8,7 @@ usage ()
 
 # Tests for requirements
 ./ffmpeg -version >/dev/null || { echo >&2 "We require './ffmpeg' but it's not installed. Install it by 'sudo apt-get install ./ffmpeg' Aborting."; exit 1; }
-./sox --version >/dev/null || { echo >&2 "We require './sox' but it's not installed. Install it by 'sudo apt-get install ./sox' Aborting."; exit 1; }
+./sox/sox --version >/dev/null || { echo >&2 "We require './sox' but it's not installed. Install it by 'sudo apt-get install ./sox' Aborting."; exit 1; }
 
 if [ "$#" -ne 2 ]
 then
@@ -70,8 +70,8 @@ else
     ./ffmpeg -y -i "$1" "$tmpAudFile"
 fi
 ./ffmpeg -v warning -y -i "$1" -vn -ss "$sampleStart" -t "$sampleEnd" "$noiseAudFile"
-./sox "$noiseAudFile" -n noiseprof "$noiseProfFile"
-./sox "$tmpAudFile" "$tmpAudCleanFile" noisered "$noiseProfFile" "$sensitivity"
+./sox/sox "$noiseAudFile" -n noiseprof "$noiseProfFile"
+./sox/sox "$tmpAudFile" "$tmpAudCleanFile" noisered "$noiseProfFile" "$sensitivity"
 if [ $isVideo -eq "1" ]; then
     ./ffmpeg -v warning -y -i "$tmpAudCleanFile" -i "$tmpVidFile" -vcodec copy -qscale:v 0 -qscale:a 0 "$2"
 else
